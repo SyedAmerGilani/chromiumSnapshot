@@ -17,7 +17,7 @@ import platform
 class chromiumSnapshot:
 
     zipFileTable = {'Win':'chrome-win32.zip', 'Linux':'chrome-linux.zip', 'Linux_x64':'chrome-linux.zip'}
-    executableTable = {'Win':'chrome.exe', 'Linux':'chrome-linux/chrome', 'Linux_x64':'chrome-linux/chrome'}
+    executableTable = {'Win':'chrome-win32\chrome.exe', 'Linux':'chrome-linux/chrome', 'Linux_x64':'chrome-linux/chrome'}
 
     def __init__(self,name):
         #logging.basicConfig(level=logging.DEBUG)
