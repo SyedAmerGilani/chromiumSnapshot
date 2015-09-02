@@ -12,7 +12,7 @@ from zipfile import ZipFile
 import platform
 
 class chromiumSnapshot:
-
+    '''Downloads the latest chromium snapshop end executes it'''
     zipFileTable = {'Win':'chrome-win32.zip', 'Linux':'chrome-linux.zip', 'Linux_x64':'chrome-linux.zip'}
     executableTable = {'Win':'chrome-win32\chrome.exe', 'Linux':'chrome-linux/chrome', 'Linux_x64':'chrome-linux/chrome'}
 
@@ -25,8 +25,8 @@ class chromiumSnapshot:
         self.run()
         self.writeINI(name)
 
-
     def readINI(self,name):
+        '''read configuration from ini file'''
         self.oldLatest = 0
         configParser = configparser.ConfigParser()
         if exists(name):
@@ -40,6 +40,7 @@ class chromiumSnapshot:
         print("Old Revision: " + str(self.oldLatest))
 
     def writeINI(self,name):
+        '''write configuration to ini file'''
         configParser = configparser.ConfigParser()
         configParser.add_section('general')
         configParser.set('general', 'latest', str(self.latest))
@@ -49,6 +50,7 @@ class chromiumSnapshot:
             configParser.write(configfile)
 
     def detectPlatform(self):
+        '''detect the platform we are running on'''
         detectedPlatform = platform.system()
         if detectedPlatform == 'Windows':
             self.platform = 'Win'
@@ -63,12 +65,13 @@ class chromiumSnapshot:
         print("detected platform: " + self.platform)
 
     def getLatestRevision(self):
+        '''get the revision of the latest chromium snapshot'''
         latestfile = urllib.request.urlopen(self.baseUrl + '/' + self.platform + '/LAST_CHANGE')
         self.latest = int(latestfile.read().decode('utf-8'))
         print("Latest Revision: " + str(self.latest))
 
-        
     def getLatest(self):
+        '''get the latest chromium snapshot and extract it to the output folder'''
         if not os.path.exists(self.outputDirectory):
             os.makedirs(self.outputDirectory)
         if (self.oldLatest < self.latest) or (not os.path.exists(join(self.outputDirectory, self.executableTable[self.platform]))):
@@ -79,6 +82,7 @@ class chromiumSnapshot:
             zipfile.extractall(self.outputDirectory)
 
     def run(self):
+        '''run chromium'''
         print("executing...")
         command = join(self.outputDirectory, self.executableTable[self.platform])
         os.chmod(command, os.stat(command).st_mode | stat.S_IXUSR)
