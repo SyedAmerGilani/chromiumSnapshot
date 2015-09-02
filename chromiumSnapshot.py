@@ -11,9 +11,6 @@ from io import BytesIO
 from zipfile import ZipFile
 import platform
 
-
-
-
 class chromiumSnapshot:
 
     zipFileTable = {'Win':'chrome-win32.zip', 'Linux':'chrome-linux.zip', 'Linux_x64':'chrome-linux.zip'}
@@ -34,12 +31,12 @@ class chromiumSnapshot:
         configParser = configparser.ConfigParser()
         if exists(name):
             configParser.read(name)
-            config = configParser['general']
-            self.oldLatest = int(config.get('latest',0))
-            self.baseUrl = config.get('baseUrl', 'https://storage.googleapis.com/chromium-browser-continuous')
-            self.outputDirectory = config.get('outputDirectory','output')
         else:
-            logging.warning("could not find config file")
+            configParser.add_section('general')
+        config = configParser['general']
+        self.oldLatest = int(config.get('latest',0))
+        self.baseUrl = config.get('baseUrl', 'https://storage.googleapis.com/chromium-browser-continuous')
+        self.outputDirectory = config.get('outputDirectory','output')
         print("Old Revision: " + str(self.oldLatest))
 
     def writeINI(self,name):
